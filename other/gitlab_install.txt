@@ -1,0 +1,29 @@
+[root@10-10-3-130 software]# rpm -ivh gitlab-ce-8.0.5-ce.0.el6.x86_64.rpm 
+Preparing...                ########################################### [100%]
+   1:gitlab-ce              ########################################### [100%]
+hostname: Unknown host
+gitlab: Thank you for installing GitLab!
+gitlab: To configure and start GitLab, RUN THE FOLLOWING COMMAND:
+
+sudo gitlab-ctl reconfigure
+
+gitlab: GitLab should be reachable at http://gitlab.example.com
+gitlab: Otherwise configure GitLab for your system by editing /etc/gitlab/gitlab.rb file
+gitlab: And running reconfigure again.
+gitlab: 
+gitlab: For a comprehensive list of configuration options please see the Omnibus GitLab readme
+gitlab: https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/README.md
+gitlab: 
+It looks like GitLab has not been configured yet; skipping the upgrade script.
+
+gitlab-ctl reconfigure
+
+ vi /etc/sysconfig/iptables 
+	-A INPUT -p tcp -m state --state NEW -m tcp --dport 80 -j ACCEPT 
+ service iptables restart
+
+
+gitlabƒ¨»œ’À∫≈
+Username: root 
+Password: 5iveL!fe
+

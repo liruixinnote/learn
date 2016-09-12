@@ -1,0 +1,102 @@
+开发环境：123.59.83.231
+
+chmod u+x jdk-7u60-linux-x64.rpm
+rpm -ivh jdk-7u60-linux-x64.rpm
+
+vi /etc/profile
+#This is for JDK1.7.0_60
+JAVA_HOME=/usr/java/jdk1.7.0_60
+CLASSPATH=$JAVA_HOME/lib:$JAVA_HOME/jre/lib
+PATH=$PATH:$JAVA_HOME/bin:$JAVA_HOME/jre/bin
+export PATH CLASSPATH JAVA_HOME
+
+source /etc/profile
+
+java -version
+java version "1.7.0_60"
+Java(TM) SE Runtime Environment (build 1.7.0_60-b19)
+Java HotSpot(TM) 64-Bit Server VM (build 24.60-b09, mixed mode)
+
+tar zxvf CollabNetSubversionEdge-5.1.0_linux-x86_64.tar.gz
+mv csvn /data
+groupadd -g 701 svn
+useradd -u 701 -g svn svn
+passwd svn
+
+chmod u+w /etc/sudoers
+在root    ALL=(ALL)       ALL
+下面添加
+svn    ALL=(ALL)       ALL
+保存后退出
+
+chmo u-w /etc/sudoers
+chown -R svn:svn /data/csvn
+
+su - svn
+cd /data/csvn/data/conf
+cp csvn.conf csvn.conf.bak
+vi csvn.conf
+修改如下（指定csvn执行用户和java的环境）：
+RUN_AS_USER=svn
+JAVA_HOME=/usr/java/jdk1.7.0_60
+
+修改iptables，添加以下策略
+-A INPUT -p tcp -m state --state NEW -m tcp --dport 3343 -j ACCEPT
+-A INPUT -p tcp -m state --state NEW -m tcp --dport 4434 -j ACCEPT
+-A INPUT -p tcp -m state --state NEW -m tcp --dport 18080 -j ACCEPT
+
+
+安装csvn:
+$cd /data/csvn
+$sudo -E bin/csvn install
+
+启动csvn：
+$ bin/csvn start
+
+后台管理：
+Address: http://IP:3343/csvn
+Username: admin
+Password: admin
+
+登录成功后，进行svn管理，建议后台登录及svn代码check out均采用https方式
+
+加密端口要改成1024以上的，因为1024以内的端口需要root权限，
+
+
+
+      
+系统用户：svn
+密码：CGlGivnekLqoa8P
+
+svn管理访问方式：
+https://123.59.57.72:4434/csvn
+admin/CGlGivnekLqoa8P
+svnadm/l8ygk4bGWO2YgkZj
+
+版本checkout
+https://123.59.57.72:18080/svn/project名称
+ 
+#####################
+svn 管理命令  
+cd /data/csvn/data/repositories    #进入到父目录
+svnadmin  create 版本库目录位置     #创建版本库
+svn add  file、document            #增加文件
+svn  commit -m "" fiel.document    #提交到服务器
+
+####################
+git安装
+
+tar zxvf git-2.6.2.tar.gz
+cd git-2.6.2
+yum -y  install zlib_devel perl-ExtUtils-MakeMaker tcl gettext-devel libcurl-devel
+./configure -prefix=/data/git --with-curl  --with-expat
+make
+make install
+
+vi /etc/profile  追加：
+GIT_HOME=/data/git
+PATH=$PATH:$GIT_HOME/bin:$GIT_HOME/libexec/git-core
+export PATH GIT_HOME
+
+source /etc/profile
+git --version
